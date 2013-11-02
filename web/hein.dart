@@ -46,7 +46,7 @@ class HeinCanvas {
     scene.add(pointLight);
 
     camera = new PerspectiveCamera(75.0, screenW / screenH);
-    camera.position.z = 5.0;
+    camera.position = new vm.Vector3(5.0, 5.0, 12.0);
     controls = new OrbitControls(camera, renderer.domElement);
   }
 
