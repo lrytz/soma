@@ -3,3 +3,7 @@ packages
 .project
 pubspec.lock
 /build/
+*.dart.js
+*.dart.js.deps
+*.js.map
+*.precompiled.js
