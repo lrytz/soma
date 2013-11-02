@@ -1,4 +1,4 @@
-name: hein
+name: soma
 description: A sample web application
 dependencies:
   browser: any

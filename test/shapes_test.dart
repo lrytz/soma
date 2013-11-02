@@ -34,7 +34,7 @@ conflictsTest() {
 }
 
 solutionTest() {
-  for (Shape s in SHAPES) {
+  for (Shape s in ALL_SHAPES) {
     expect(
         new Cube().validPartialSolution([s]),
         equals(true));

@@ -1,4 +1,4 @@
-library hein;
+library soma;
 
 import 'dart:html';
 import 'shapes.dart';
@@ -8,10 +8,10 @@ import 'dart:math' as dm;
 
 void main() {
   List<Shape> cubeSolution = findSolution([], ALL_SHAPES, new Cube());
-  HeinCanvas canvas = new HeinCanvas(cubeSolution);
+  SomaCanvas canvas = new SomaCanvas(cubeSolution);
 }
 
-class HeinCanvas {
+class SomaCanvas {
   Element container = new Element.tag('div');
   Renderer renderer = new WebGLRenderer();
 
@@ -20,7 +20,7 @@ class HeinCanvas {
   int screenW = window.innerWidth;
   int screenH = window.innerHeight;
 
-  HeinCanvas(List<Shape> shapes) {
+  SomaCanvas(List<Shape> shapes) {
     renderer.setSize(screenW, screenH);
     document.body.nodes.add(container);
     container.nodes.add(renderer.domElement);
