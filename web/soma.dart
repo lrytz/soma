@@ -7,23 +7,26 @@ import 'package:vector_math/vector_math.dart' as vm;
 import 'dart:math' as dm;
 
 void main() {
-  List<Shape> cubeSolution = new Cube().firstSolution();
-  SomaCanvas canvas = new SomaCanvas(cubeSolution);
+  SomaCanvas canvas = new SomaCanvas("cube");
 }
 
 class SomaCanvas {
+  String shapeName;
+  List<ShapeGeometry> geometries = <ShapeGeometry>[];
+
   Element container = querySelector('#soma');
+  SelectElement selector = querySelector("#selector");
   Renderer renderer = new WebGLRenderer();
 
   OrbitControls controls;
 
-  SomaCanvas(List<Shape> shapes) {
+  SomaCanvas(this.shapeName) {
     renderer.setSize(window.innerWidth, window.innerHeight);
     container.append(renderer.domElement);
 
     setupScene();
     addAxisHelper();
-    addShapes(shapes);
+    updateShapes();
     render(0);
   }
 
@@ -50,6 +53,8 @@ class SomaCanvas {
     controls = new OrbitControls(camera, renderer.domElement);
 
     listenResize(renderer, camera);
+
+    listenSelector();
   }
 
   addAxisHelper() {
@@ -58,9 +63,19 @@ class SomaCanvas {
     scene.add(axes);
   }
 
-  addShapes(List<Shape> shapes) {
+  updateShapes() {
+    Figure figure;
+    switch(shapeName) {
+      case "cube": figure = new Cube(); break;
+      case "castle": figure = new Castle(); break;
+      case "bathtub": figure = new Bathtub(); break;
+    }
+    geometries.forEach((s) => scene.remove(s));
+    geometries = <ShapeGeometry>[];
+    List<Shape> shapes = figure.firstSolution();
     shapes.forEach((s) {
       var geometry = new ShapeGeometry(s);
+      geometries.add(geometry);
       scene.add(geometry);
     });
   }
@@ -71,7 +86,7 @@ class SomaCanvas {
     controls.update();
   }
 
-  void listenResize(renderer, camera){
+  void listenResize(renderer, camera) {
     var doResize = (e) {
       // notify the renderer of the size change
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -82,6 +97,14 @@ class SomaCanvas {
     // bind the resize event
     window.onResize.listen(doResize);
   }
+
+  void listenSelector() {
+    var doSelect = (Event e) {
+      shapeName = (e.target as SelectElement).value;
+      updateShapes();
+    };
+    selector.onChange.listen(doSelect);
+  }
 }
 
 
@@ -91,9 +114,9 @@ class ShapeGeometry extends Object3D {
     var material = new MeshLambertMaterial(color: new dm.Random().nextInt(0xffffff));
     for (Vector e in shape.elements) {
       var cube = new Mesh(geometry, material);
-      cube.position.x = e.x.toDouble();
-      cube.position.y = e.y.toDouble();
-      cube.position.z = e.z.toDouble();
+      cube.position.x = e.x.toDouble() + 0.3 * e.x.toDouble();
+      cube.position.y = e.y.toDouble() + 0.3 * e.y.toDouble();
+      cube.position.z = e.z.toDouble() + 0.3 * e.z.toDouble();
       this.add(cube);
     }
   }
