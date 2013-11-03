@@ -7,7 +7,7 @@ import 'package:vector_math/vector_math.dart' as vm;
 import 'dart:math' as dm;
 
 void main() {
-  List<Shape> cubeSolution = new Bathtub().firstSolution();
+  List<Shape> cubeSolution = new Cube().firstSolution();
   SomaCanvas canvas = new SomaCanvas(cubeSolution);
 }
 
