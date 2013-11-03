@@ -3,6 +3,7 @@ library shapes;
 import 'utils.dart';
 
 part 'solution.dart';
+part 'dlx.dart';
 
 class Shape {
   final List<Vector> elements;

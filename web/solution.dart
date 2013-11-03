@@ -32,7 +32,7 @@ abstract class Figure {
 
 class Cube extends Figure {
   bool contains(Vector element) {
-    return element.x >= 0 && element.y <= 2 &&
+    return element.x >= 0 && element.x <= 2 &&
            element.y >= 0 && element.y <= 2 &&
            element.z >= 0 && element.z <= 2;
   }
