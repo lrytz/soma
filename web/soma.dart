@@ -25,7 +25,7 @@ class SomaCanvas {
     container.append(renderer.domElement);
 
     setupScene();
-    addAxisHelper();
+    // addAxisHelper();
     updateShapes();
     render(0);
   }
