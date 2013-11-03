@@ -6,6 +6,7 @@ main() {
   rotationTest();
   conflictsTest();
   solutionTest();
+  dlxTest();
 }
 
 void vectorTests() {
@@ -26,25 +27,51 @@ void rotationTest() {
 
 conflictsTest() {
   expect(
-      conflicts(SHAPE_V, SHAPE_V.translate(UNIT_X)),
+      SHAPE_V.conflicts(SHAPE_V.translate(UNIT_X)),
       equals(true));
   expect(
-      conflicts(SHAPE_V, SHAPE_V.translate(UNIT_Z)),
+      SHAPE_V.conflicts(SHAPE_V.translate(UNIT_Z)),
       equals(false));
 }
 
 solutionTest() {
+  Cube cube = new Cube();
   for (Shape s in ALL_SHAPES) {
     expect(
-        new Cube().validPartialSolution([s]),
+        cube.validPartialSolution([s]),
         equals(true));
   }
   expect(
-         new Cube().validPartialSolution([SHAPE_Z, SHAPE_V.translate(UNIT_Z)]),
+         cube.validPartialSolution([SHAPE_Z, SHAPE_V.translate(UNIT_Z)]),
          equals(true));
   expect(
-      new Cube().validPartialSolution([SHAPE_B, SHAPE_T.translate(UNIT_Z)]),
+      cube.validPartialSolution([SHAPE_B, SHAPE_T.translate(UNIT_Z)]),
       equals(false));
+
+
+  List<Shape> solution = cube.firstSolution();
+  expect(cube.validSolution(solution), equals(true));
+}
+
+dlxTest() {
+  List<List<int>> m1 =
+      [[1,0],
+       [1,0],
+       [0,1],
+       [1,1]];
+  Solver s1 = new Solver.fromMatrixIndexResult(m1);
+  expect(s1.findFirst(), equals([2, 0]));
+  expect(s1.findAll(), equals([[2, 0], [2, 1], [3]]));
+
+  List<List<int>> m2 =
+      [[0,0,1,0,1,1,0],
+       [1,0,0,1,0,0,1],
+       [0,1,1,0,0,1,0],
+       [1,0,0,1,0,0,0],
+       [0,1,0,0,0,0,1],
+       [0,0,0,1,1,0,1]];
+  Solver s2 = new Solver.fromMatrixIndexResult(m2);
+  expect(s2.findAll(), equals([[3, 0, 4]]));
 }
 
 
