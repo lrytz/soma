@@ -102,7 +102,6 @@ class SomaCanvas {
   }
 }
 
-
 class ShapeGeometry extends Object3D {
   ShapeGeometry(Shape shape) {
     var geometry = new CubeGeometry(1.0, 1.0, 1.0);
@@ -115,9 +114,7 @@ class ShapeGeometry extends Object3D {
       this.add(cube);
     }
   }
-
 }
-
 
 class OrbitControls {
   Object3D object;
@@ -282,7 +279,7 @@ class OrbitControls {
 
     event.preventDefault();
 
-    if ( state == STATE_NONE ) {
+    if (state == STATE_NONE) {
       state = STATE_ROTATE;
     }
 
@@ -329,6 +326,5 @@ class OrbitControls {
     } else {
       zoomIn();
     }
-
   }
 }
