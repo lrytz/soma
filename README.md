@@ -25,4 +25,4 @@ The 3D presentation uses [three.dart](http://threedart.github.io/three.dart/), a
 
 The [three.js examples page](http://stemkoski.github.io/Three.js/) by
 [Lee Stemkoski](http://home.adelphi.edu/~stemkoski/) was tremendously helpful. The code for zooming and rotating
-the camera was directly translated to dart from his examples.
+the camera was directly translated to Dart from his examples.
