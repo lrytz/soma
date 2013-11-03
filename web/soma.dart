@@ -39,12 +39,12 @@ class SomaCanvas {
     var ambient = new AmbientLight(0x404040);
     scene.add(ambient);
 
-    var pointLight = new DirectionalLight(0xffffff);
-    pointLight.position.setValues(1.0, 1.0, 1.0);
+    var pointLight = new SpotLight(0xffffff);
+    pointLight.position.setValues(10.0, 10.0, 10.0);
     scene.add(pointLight);
 
-    pointLight = new DirectionalLight(0xffffff);
-    pointLight.position.setValues(-1.0, -1.0, -1.0);
+    pointLight = new SpotLight(0xffffff);
+    pointLight.position.setValues(-10.0, -10.0, -10.0);
     scene.add(pointLight);
 
     camera = new PerspectiveCamera(75.0, window.innerWidth / window.innerHeight);
@@ -64,12 +64,7 @@ class SomaCanvas {
   }
 
   updateShapes() {
-    Figure figure;
-    switch(shapeName) {
-      case "cube": figure = new Cube(); break;
-      case "castle": figure = new Castle(); break;
-      case "bathtub": figure = new Bathtub(); break;
-    }
+    Figure figure = new Figure.fromName(shapeName);
     geometries.forEach((s) => scene.remove(s));
     geometries = <ShapeGeometry>[];
     List<Shape> shapes = figure.firstSolution();
