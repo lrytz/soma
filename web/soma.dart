@@ -1,13 +1,13 @@
 library soma;
 
 import 'dart:html';
-import 'shapes.dart';
+import 'shapes.dart' hide Element;
 import 'package:three/three.dart' hide Shape;
 import 'package:vector_math/vector_math.dart' as vm;
 import 'dart:math' as dm;
 
 void main() {
-  List<Shape> cubeSolution = findSolution([], ALL_SHAPES, new Cube());
+  List<Shape> cubeSolution = new Cube().firstSolution();
   SomaCanvas canvas = new SomaCanvas(cubeSolution);
 }
 

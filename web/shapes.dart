@@ -57,6 +57,8 @@ class Shape {
 
   Shape rotate(Rotation m) =>
     new Shape(elements.map((e) => e.rotate(m)).toList());
+
+  bool conflicts(Shape b) => elements.any((e) => b.elements.contains(e));
 }
 
 typedef bool BinaryPredicate(int x, int y);

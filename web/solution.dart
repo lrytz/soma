@@ -1,20 +1,22 @@
 part of shapes;
 
-bool conflicts(Shape a, Shape b) =>
-    a.elements.any((e) => b.elements.contains(e));
-
 abstract class Figure {
   bool contains(Vector element);
   Vector get spread;
 
+  bool containsShape(Shape shape) {
+    for (Vector e in shape.elements) {
+      if (!contains(e)) return false;
+    }
+    return true;
+  }
+
   bool validPartialSolution(List<Shape> shapes) {
     for (int i = 0; i < shapes.length; i++) {
       for (int j = i + 1; j < shapes.length; j++) {
-        if (conflicts(shapes[i], shapes[j])) return false;
+        if (shapes[i].conflicts(shapes[j])) return false;
       }
-      for (Vector e in shapes[i].elements) {
-        if (!contains(e)) return false;
-      }
+      if (!containsShape(shapes[i])) return false;
     }
     return true;
   }
@@ -28,6 +30,47 @@ abstract class Figure {
 //  }
     return validPartialSolution(shapes);
   }
+
+  List<Shape> firstSolution() => findSolution(false);
+  List<List<Shape>> allSolutions() => findSolution(true);
+
+  findSolution(bool findAll) {
+    List<List<int>> matrix = <List<int>>[];
+    List<Shape> rowData = <Shape>[];
+    int numShapes = ALL_SHAPES.length;
+    List<Vector> elements = <Vector>[];
+    for (int i = 0; i < spread.x; i++) {
+      for (int j = 0; j < spread.y; j++) {
+        for (int k = 0; k < spread.z; k++) {
+          Vector v = new Vector(i, j, k);
+          if (contains(v)) elements.add(v);
+        }
+      }
+    }
+    int numElements = elements.length;
+    for (int i = 0; i < numShapes; i++) {
+      Shape s = ALL_SHAPES[i];
+      Iterator<Shape> positions = new ShapeTransformations(s, this);
+      while (positions.moveNext()) {
+        List<int> row = new List<int>.filled(numShapes + numElements, 0);
+        row[i] = 1;
+        Shape shape = positions.current;
+        rowData.add(shape);
+        for (int j = 0; j < numElements; j++) {
+          if (shape.elements.contains(elements[j])) {
+            row[numShapes + j] = 1;
+          }
+        }
+        matrix.add(row);
+      }
+    }
+    Solver<Shape> solver = new Solver.fromMatrix(matrix, rowData);
+    if (findAll) {
+      return solver.findAll();
+    } else {
+      return solver.findFirst();
+    }
+  }
 }
 
 class Cube extends Figure {
@@ -37,7 +80,7 @@ class Cube extends Figure {
            element.z >= 0 && element.z <= 2;
   }
 
-  final Vector spread = const Vector(2, 2, 2);
+  final Vector spread = const Vector(3, 3, 3);
 
   static Cube _instance;
 
@@ -49,35 +92,17 @@ class Cube extends Figure {
   Cube._internal();
 }
 
-List<Shape> findSolution(List<Shape> placed, List<Shape> unplaced, Figure figure) {
-  if (unplaced.isEmpty) return placed;
-  Shape next = unplaced.first;
-  List<Shape> rest = unplaced.sublist(1, unplaced.length);
-
-  Iterator<Shape> nextPositions = new TransformedShapeIterator(next, placed, figure);
-  while (nextPositions.moveNext()) {
-    List<Shape> newPlaced = <Shape>[];
-    newPlaced.addAll(placed);
-    newPlaced.add(nextPositions.current);
-    List<Shape> solution = findSolution(newPlaced, rest, figure);
-    if (solution != null) return solution;
-  }
-  return null;
-}
-
-class TransformedShapeIterator extends Iterator<Shape> {
-  final Shape next;
-  final List<Shape> placed;
+class ShapeTransformations extends Iterator<Shape> {
+  final Shape shape;
   final Figure figure;
 
-  TransformedShapeIterator(this.next, this.placed, this.figure);
+  ShapeTransformations(this.shape, this.figure);
 
   int x = -1, y = 0, z = 0, r1 = 0, r2 = 0;
 
   Shape current;
 
   bool moveNext() {
-    // First return / try [next].
     if (x == -1) {
       x = 0;
     } else if (r2 < 4) {
@@ -85,16 +110,16 @@ class TransformedShapeIterator extends Iterator<Shape> {
     } else if (r1 < 6) {
       r1++;
       r2 = 0;
-    } else if (z <= figure.spread.z) {
+    } else if (z < figure.spread.z) {
       z++;
       r1 = 0;
       r2 = 0;
-    } else if (y <= figure.spread.y) {
+    } else if (y < figure.spread.y) {
       y++;
       r1 = 0;
       r2 = 0;
       z = 0;
-    } else if (x <= figure.spread.x) {
+    } else if (x < figure.spread.x) {
       x++;
       r1 = 0;
       r2 = 0;
@@ -121,21 +146,13 @@ class TransformedShapeIterator extends Iterator<Shape> {
     for (int i = 0; i < r2; i++) {
       rotation = rotation.andThen(ROTATE_Z);
     }
-    Shape rotated = next.rotate(rotation);
+    Shape rotated = shape.rotate(rotation);
     current = rotated.moveTo(new Vector(x, y, z));
 
-    List<Shape> sol = <Shape>[];
-    sol.addAll(placed);
-    sol.add(current);
-    if (figure.validPartialSolution(sol)) {
+    if (figure.containsShape(current)) {
       return true;
     } else {
       return moveNext();
     }
   }
 }
-
-
-
-
-

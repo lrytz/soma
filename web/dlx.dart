@@ -9,17 +9,17 @@ class Element {
   Element(this.left, this.right, this.up, this.down, this.header);
 }
 
-class RowElement extends Element {
-  int row;
+class RowElement<T> extends Element {
+  T elem;
   RowElement(RowElement left, RowElement right, Element up, Element down,
-      HeaderElement header, this.row) : super(left, right, up, down, header) {
+      HeaderElement header, this.elem) : super(left, right, up, down, header) {
     left.right = this;
     right.left = this;
     up.down = this;
     down.up = this;
   }
 
-  RowElement.initial(Element up, Element down, HeaderElement header, this.row)
+  RowElement.initial(Element up, Element down, HeaderElement header, this.elem)
       : super(null, null, up, down, header) {
     left = this;
     right = this;
@@ -47,16 +47,29 @@ class HeaderElement extends Element {
 }
 
 // list of rows or null
-class Solver {
+class Solver<T> {
   HeaderElement h;
 
-  List<List<int>> solutions = <List<int>>[];
+  List<List<T>> solutions = <List<T>>[];
 
-  Solver.fromMatrix(List<List<int>> m) {
+  Solver.fromMatrixIndexResult(List<List<int>> m) {
+    int numRows = m.length;
+    List<int> indices = new List<int>(numRows);
+    for (int i = 0; i < numRows; i++) {
+      indices[i] = i;
+    }
+    buildLinks(m, indices);
+  }
+
+  Solver.fromMatrix(List<List<int>> m, List<T> rowData) {
+    buildLinks(m, rowData);
+  }
+
+  void buildLinks(List<List<int>> m, List<T> rowData) {
     h = new HeaderElement.initial();
     bool headerDone = false;
     HeaderElement currentHeader = h;
-    RowElement lastInRow = null;
+    RowElement<T> lastInRow = null;
 
     for (int i = 0; i < m.length; i++) {
       List<int> row = m[i];
@@ -69,10 +82,10 @@ class Solver {
         if (row[j] == 1) {
           if (lastInRow == null) {
             lastInRow = new RowElement.initial(
-                currentHeader.up, currentHeader, currentHeader, i);
+                currentHeader.up, currentHeader, currentHeader, rowData[i]);
           } else {
             lastInRow = new RowElement(lastInRow, lastInRow.right,
-                currentHeader.up, currentHeader, currentHeader, i);
+                currentHeader.up, currentHeader, currentHeader, rowData[i]);
           }
           currentHeader.size++;
         }
@@ -83,20 +96,20 @@ class Solver {
     }
   }
 
-  List<RowElement> o = <RowElement>[];
+  List<RowElement<T>> o = <RowElement<T>>[];
   HeaderElement c;
   Element r;
   Element j;
 
-  List<int> findFirst() {
-    solutions = <List<int>>[];
+  List<T> findFirst() {
+    solutions = <List<T>>[];
     search(0, false);
     if (solutions.isEmpty) return null;
     return solutions.first;
   }
 
-  List<List<int>> findAll() {
-    solutions = <List<int>>[];
+  List<List<T>> findAll() {
+    solutions = <List<T>>[];
     search(0, true);
     return solutions;
   }
@@ -146,13 +159,9 @@ class Solver {
     return minElement;
   }
 
-  void printSolution(List<RowElement> o) {
-    print(o.map((e) => e.row).toList());
-  }
-
-  void appendSolution(List<RowElement> o) {
-    List<int> r = <int>[];
-    o.forEach((e) => r.add(e.row));
+  void appendSolution(List<RowElement<T>> o) {
+    List<T> r = <T>[];
+    o.forEach((e) => r.add(e.elem));
     solutions.add(r);
   }
 
