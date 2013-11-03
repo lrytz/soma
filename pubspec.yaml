@@ -1,9 +1,9 @@
 name: soma
 description: A sample web application
 dependencies:
-  browser: any
+  browser: 0.8.4
   three:
     git:
       url: https://github.com/threeDart/three.dart.git
       ref: 7d9284b4a47618e756a3f443b9bcf27b12238fb9
-  unittest: any
+  unittest: 0.8.4

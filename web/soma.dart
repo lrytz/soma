@@ -41,7 +41,11 @@ class SomaCanvas {
     scene.add(ambient);
 
     var pointLight = new DirectionalLight(0xffffff);
-    pointLight.position.setValues(1.0, 1.0, 1.0).normalize();
+    pointLight.position.setValues(1.0, 1.0, 1.0);
+    scene.add(pointLight);
+
+    pointLight = new DirectionalLight(0xffffff);
+    pointLight.position.setValues(-1.0, -1.0, -1.0);
     scene.add(pointLight);
 
     camera = new PerspectiveCamera(75.0, screenW / screenH);
