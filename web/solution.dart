@@ -198,7 +198,6 @@ class ShapeTransformations extends Iterator<Shape> {
     }
   }
 
-
   bool tryNext() {
     Rotation rotation = ROTATE_ID;
     for (int i = 0; i < 4 && i < r1; i++) {
@@ -215,7 +214,6 @@ class ShapeTransformations extends Iterator<Shape> {
     }
     Shape rotated = shape.rotate(rotation);
     current = rotated.moveTo(new Vector(x, y, z));
-
     return figure.containsShape(current);
   }
 }

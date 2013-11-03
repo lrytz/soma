@@ -46,7 +46,6 @@ class HeaderElement extends Element {
   }
 }
 
-// list of rows or null
 class Solver<T> {
   HeaderElement h;
 
