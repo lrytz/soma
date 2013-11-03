@@ -92,6 +92,59 @@ class Cube extends Figure {
   Cube._internal();
 }
 
+class Castle extends Figure {
+  bool contains(Vector element) {
+    int x = element.x;
+    int y = element.y;
+    int z = element.z;
+    if (y == 0) {
+      return x >= 0 && x <= 4 && z >= 0 && z <= 4 && !(x == 4 && z == 4);
+    } else if (y == 1) {
+      return (x == 0 && z == 0) || (x == 4 && z == 0) || (x == 0 && z == 4);
+    } else {
+      return false;
+    }
+  }
+
+  final Vector spread = const Vector(5, 2, 5);
+
+  static Castle _instance;
+
+  factory Castle() {
+    if (_instance == null) _instance = new Castle._internal();
+    return _instance;
+  }
+
+  Castle._internal();
+}
+
+class Bathtub extends Figure {
+  bool contains(Vector element) {
+    int x = element.x;
+    int y = element.y;
+    int z = element.z;
+    if (y == 0) {
+      return x >= 0 && x <= 2 && z >= 0 && z <= 4;
+    } else if (y == 1) {
+      return ((x == 0 || x == 2) && z >= 0 && z <= 4) || (x == 1 && (z == 0 || z == 4));
+    } else {
+      return false;
+    }
+  }
+
+  final Vector spread = const Vector(3, 2, 5);
+
+  static Bathtub _instance;
+
+  factory Bathtub() {
+    if (_instance == null) _instance = new Bathtub._internal();
+    return _instance;
+  }
+
+  Bathtub._internal();
+}
+
+
 class ShapeTransformations extends Iterator<Shape> {
   final Shape shape;
   final Figure figure;

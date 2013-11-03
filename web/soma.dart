@@ -7,23 +7,19 @@ import 'package:vector_math/vector_math.dart' as vm;
 import 'dart:math' as dm;
 
 void main() {
-  List<Shape> cubeSolution = new Cube().firstSolution();
+  List<Shape> cubeSolution = new Bathtub().firstSolution();
   SomaCanvas canvas = new SomaCanvas(cubeSolution);
 }
 
 class SomaCanvas {
-  Element container = new Element.tag('div');
+  Element container = querySelector('#soma');
   Renderer renderer = new WebGLRenderer();
 
   OrbitControls controls;
 
-  int screenW = window.innerWidth;
-  int screenH = window.innerHeight;
-
   SomaCanvas(List<Shape> shapes) {
-    renderer.setSize(screenW, screenH);
-    document.body.nodes.add(container);
-    container.nodes.add(renderer.domElement);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.append(renderer.domElement);
 
     setupScene();
     addAxisHelper();
@@ -48,13 +44,17 @@ class SomaCanvas {
     pointLight.position.setValues(-1.0, -1.0, -1.0);
     scene.add(pointLight);
 
-    camera = new PerspectiveCamera(75.0, screenW / screenH);
+    camera = new PerspectiveCamera(75.0, window.innerWidth / window.innerHeight);
     camera.position = new vm.Vector3(5.0, 5.0, 12.0);
+
     controls = new OrbitControls(camera, renderer.domElement);
+
+    listenResize(renderer, camera);
   }
 
   addAxisHelper() {
     var axes = new AxisHelper();
+    axes.scale = new vm.Vector3(0.2, 0.2, 0.2);
     scene.add(axes);
   }
 
@@ -65,11 +65,22 @@ class SomaCanvas {
     });
   }
 
-
   void render(num time) {
     window.requestAnimationFrame(render);
     renderer.render(scene, camera);
     controls.update();
+  }
+
+  void listenResize(renderer, camera){
+    var doResize = (e) {
+      // notify the renderer of the size change
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      // update the camera
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    };
+    // bind the resize event
+    window.onResize.listen(doResize);
   }
 }
 
