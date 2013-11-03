@@ -4,6 +4,16 @@ abstract class Figure {
   bool contains(Vector element);
   Vector get spread;
 
+  Figure();
+
+  factory Figure.fromName(String shapeName) {
+    switch(shapeName) {
+      case "cube": return new Cube();
+      case "castle": return new Castle();
+      case "bathtub": return new Bathtub();
+    }
+  }
+
   bool containsShape(Shape shape) {
     for (Vector e in shape.elements) {
       if (!contains(e)) return false;
@@ -156,32 +166,36 @@ class ShapeTransformations extends Iterator<Shape> {
   Shape current;
 
   bool moveNext() {
-    if (x == -1) {
-      x = 0;
-    } else if (r2 < 4) {
-      r2++;
-    } else if (r1 < 6) {
-      r1++;
-      r2 = 0;
-    } else if (z < figure.spread.z) {
-      z++;
-      r1 = 0;
-      r2 = 0;
-    } else if (y < figure.spread.y) {
-      y++;
-      r1 = 0;
-      r2 = 0;
-      z = 0;
-    } else if (x < figure.spread.x) {
-      x++;
-      r1 = 0;
-      r2 = 0;
-      z = 0;
-      y = 0;
-    } else {
-      return false;
+    while (true) {
+      if (x == -1) {
+        x = 0;
+      } else if (r2 < 4) {
+        r2++;
+      } else if (r1 < 6) {
+        r1++;
+        r2 = 0;
+      } else if (z < figure.spread.z) {
+        z++;
+        r1 = 0;
+        r2 = 0;
+      } else if (y < figure.spread.y) {
+        y++;
+        r1 = 0;
+        r2 = 0;
+        z = 0;
+      } else if (x < figure.spread.x) {
+        x++;
+        r1 = 0;
+        r2 = 0;
+        z = 0;
+        y = 0;
+      } else {
+        return false;
+      }
+      if (tryNext()) {
+        return true;
+      }
     }
-    return tryNext();
   }
 
 
@@ -202,10 +216,6 @@ class ShapeTransformations extends Iterator<Shape> {
     Shape rotated = shape.rotate(rotation);
     current = rotated.moveTo(new Vector(x, y, z));
 
-    if (figure.containsShape(current)) {
-      return true;
-    } else {
-      return moveNext();
-    }
+    return figure.containsShape(current);
   }
 }
