@@ -27,7 +27,6 @@ class SomaCanvas {
 
     setupScene();
     addAxisHelper();
-//    addCube();
     addShapes(shapes);
     render(0);
   }
@@ -50,37 +49,6 @@ class SomaCanvas {
     controls = new OrbitControls(camera, renderer.domElement);
   }
 
-  Mesh cube;
-
-  addCube() {
-    var geometry = new CubeGeometry(1.0, 1.0, 1.0);
-//    print(geometry.vertices);
-//    geometry.faces.forEach((f) => print(f.indices));
-
-//    var geometry = new Geometry();
-//    geometry.materials = [];
-//    geometry.vertices.add(new vm.Vector3(0.0, 0.0, 0.0));
-//    geometry.vertices.add(new vm.Vector3(1.0, 0.0, 0.0));
-//    geometry.vertices.add(new vm.Vector3(0.0, 1.0, 0.0));
-//    geometry.vertices.add(new vm.Vector3(1.0, 1.0, 0.0));
-//    geometry.vertices.add(new vm.Vector3(0.0, 0.0, 1.0));
-//    geometry.vertices.add(new vm.Vector3(1.0, 0.0, 1.0));
-//    geometry.vertices.add(new vm.Vector3(0.0, 1.0, 1.0));
-//    geometry.vertices.add(new vm.Vector3(1.0, 1.0, 1.0));
-//    geometry.faces.add(new Face4(0, 2, 3, 1));
-//    geometry.faces.add(new Face4(4, 5, 7, 6));
-//    geometry.faces.add(new Face4(6, 7, 3, 2));
-//    geometry.faces.add(new Face4(0, 1, 5, 4));
-//    geometry.faces.add(new Face4(0, 4, 6, 2));
-//    geometry.faces.add(new Face4(1, 3, 7, 5));
-
-    var material = new MeshLambertMaterial(color: 0xB32546);
-    cube = new Mesh(geometry, material);
-    print(cube.position);
-    scene.add(cube);
-
-  }
-
   addAxisHelper() {
     var axes = new AxisHelper();
     scene.add(axes);
@@ -96,8 +64,6 @@ class SomaCanvas {
 
   void render(num time) {
     window.requestAnimationFrame(render);
-//    cube.rotation.x += 0.05;
-//    cube.rotation.y += 0.02;
     renderer.render(scene, camera);
     controls.update();
   }
@@ -129,13 +95,6 @@ class OrbitControls {
     domElement.onMouseWheel.listen(onMouseWheel);
   }
 
-//    this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
-//    this.domElement.addEventListener( 'mousedown', onMouseDown, false );
-//    this.domElement.addEventListener( 'mousewheel', onMouseWheel, false );
-//    this.domElement.addEventListener( 'DOMMouseScroll', onMouseWheel, false ); // firefox
-//    window.addEventListener( 'keydown', onKeyDown, false );
-//    window.addEventListener( 'keyup', onKeyUp, false );  }
-
   bool enabled = true;
 
   vm.Vector3 center = new vm.Vector3(0.0, 0.0, 0.0);
@@ -158,10 +117,7 @@ class OrbitControls {
   double minDistance = 0.0;
   double maxDistance = double.INFINITY;
 
-
   // internals
-
-  //var scope = this;
 
   var EPS = 0.000001;
   var PIXELS_PER_ROUND = 1800;
@@ -188,9 +144,6 @@ class OrbitControls {
   var state = STATE_NONE;
 
   // events
-
-//  var changeEvent = { type: 'change' };
-
 
   void rotateLeft([angle]) {
     if (angle == null) {
@@ -234,7 +187,6 @@ class OrbitControls {
     scale *= zoomScale;
   }
 
-
   void update() {
     var position = object.position;
     var offset = position.clone().sub(center);
@@ -276,7 +228,6 @@ class OrbitControls {
     scale = 1.0;
 
     if (lastPosition.distanceTo(object.position) > 0) {
-//      this.dispatchEvent( changeEvent );
       lastPosition.setFrom(this.object.position);
     }
   }
@@ -326,10 +277,8 @@ class OrbitControls {
   }
 
   void onMouseUp(MouseEvent event) {
-
     if (!enabled) return;
     if (!userRotate) return;
-
 
     moveSubscription.cancel();
     upSubscription.cancel();
@@ -341,21 +290,7 @@ class OrbitControls {
     if (!enabled) return;
     if (!userZoom) return;
     event.preventDefault();
-
     var delta = event.deltaY;
-
-    /*
-    if ( event.wheelDelta ) { // WebKit / Opera / Explorer 9
-
-      delta = event.wheelDelta;
-
-    } else if ( event.detail ) { // Firefox
-
-      delta = - event.detail;
-
-    }
-    */
-
     if ( delta > 0 ) {
       zoomOut();
     } else {
