@@ -6,6 +6,8 @@ See it in action: http://lrytz.github.io/soma/build/soma.html
 * Drag to rotate the shape
 * Scroll to zoom
 
+![Screenshot](screenshot.png)
+
 ### Details
 
 This project implements a solver for the [Soma cube](http://en.wikipedia.org/wiki/Soma_cube), an elegant
