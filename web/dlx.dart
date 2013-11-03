@@ -89,12 +89,14 @@ class Solver {
   Element j;
 
   List<int> findFirst() {
+    solutions = <List<int>>[];
     search(0, false);
     if (solutions.isEmpty) return null;
     return solutions.first;
   }
 
   List<List<int>> findAll() {
+    solutions = <List<int>>[];
     search(0, true);
     return solutions;
   }
@@ -116,8 +118,8 @@ class Solver {
         j = j.right;
         coverColumn(j.header);
       }
-      search(k + 1, findAll);
-      if (!findAll && solutions.isNotEmpty) return;
+      if (findAll || solutions.isEmpty)
+        search(k + 1, findAll);
       o.length = k + 1;
       r = o[k];
       c = r.header;

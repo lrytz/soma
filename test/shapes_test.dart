@@ -54,10 +54,9 @@ dlxTest() {
        [1,0],
        [0,1],
        [1,1]];
-  Solver s1a = new Solver.fromMatrix(m1);
-  expect(s1a.findFirst(), equals([2, 0]));
-  Solver s1b = new Solver.fromMatrix(m1);
-  expect(s1b.findAll(), equals([[2, 0], [2, 1], [3]]));
+  Solver s1 = new Solver.fromMatrix(m1);
+  expect(s1.findFirst(), equals([2, 0]));
+  expect(s1.findAll(), equals([[2, 0], [2, 1], [3]]));
 
   List<List<int>> m2 =
       [[0,0,1,0,1,1,0],
