@@ -4,7 +4,11 @@
 
 (function() {
 // Bootstrap support for Dart scripts on the page as this script.
-if (navigator.userAgent.indexOf('(Dart)') === -1) {
+if (navigator.webkitStartDart) {
+  if (!navigator.webkitStartDart()) {
+    document.body.innerHTML = 'This build has expired.  Please download a new Dartium at http://www.dartlang.org/dartium/index.html';
+  }
+} else {
   // TODO:
   // - Support in-browser compilation.
   // - Handle inline Dart scripts.

@@ -89,14 +89,11 @@ function notifyDone() {
 }
 
 function processMessage(msg) {
-  if (typeof msg != 'string') return;
   // TODO(ricow): REMOVE, debug info, see issue 13292
   if (!testRunner) {
-    // Filter out ShadowDOM polyfill messages which are random floats.
-    if (msg != parseFloat(msg)) {
-      printMessage('processMessage(): ' + msg);
-    }
+    printMessage('processMessage(): ' + msg);
   }
+  if (typeof msg != 'string') return;
   if (msg == 'unittest-suite-done') {
     notifyDone();
   } else if (msg == 'unittest-suite-wait-for-done') {
