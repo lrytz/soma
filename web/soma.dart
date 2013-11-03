@@ -103,9 +103,14 @@ class SomaCanvas {
 }
 
 class ShapeGeometry extends Object3D {
+  static final List<int> colors = [0xFF69B4, 0xB22222, 0xFF8C00, 0xDEB887,
+                                   0x32CD32, 0x008080, 0x00008B, 0x8B008B];
+
   ShapeGeometry(Shape shape) {
     var geometry = new CubeGeometry(1.0, 1.0, 1.0);
-    var material = new MeshLambertMaterial(color: new dm.Random().nextInt(0xffffff));
+    var c = colors.removeAt(0);
+    colors.add(c);
+    var material = new MeshLambertMaterial(color: c);
     for (Vector e in shape.elements) {
       var cube = new Mesh(geometry, material);
       cube.position.x = e.x.toDouble() + 0.3 * e.x.toDouble();
