@@ -3,6 +3,7 @@
 See it in action: http://lrytz.github.io/soma/build/soma.html
 
 * Works in recent versions of [Chrome](https://www.google.com/chrome/) and [Firefox](http://www.mozilla.org/firefox/)
+  (WebGL is the limiting factor, the code compiled by dart2js works in all browsers)
 * Drag to rotate the shape
 * Scroll to zoom
 
